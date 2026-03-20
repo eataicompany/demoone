@@ -206,8 +206,9 @@ function addToCart(productId) {
     
     if (existingItem) {
         existingItem.quantity++;
-        existingItem.subtotal = (existingItem.price * existingItem.quantity) + 
-            (existingItem.extrasApplied?.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0) || 0);
+        // 🔥 RECALCULAR subtotal
+        const extrasTotal = existingItem.extrasApplied?.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0) || 0;
+        existingItem.subtotal = (existingItem.price * existingItem.quantity) + extrasTotal;
     } else {
         cart.push({ 
             ...product, 
@@ -232,7 +233,9 @@ function addExtraToCart(productId, extra) {
         } else {
             item.extrasApplied.push({ ...extra, quantity: 1 });
         }
-        item.subtotal = item.price + item.extrasApplied.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0);
+        // 🔥 RECALCULAR SUBTOTAL con extras
+        const extrasTotal = item.extrasApplied.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0);
+        item.subtotal = (item.price * item.quantity) + extrasTotal;
         updateCartUI();
         animateCart();
         showToast(`✓ ${extra.name} agregado a ${item.name}`, 'success');
@@ -400,6 +403,10 @@ function changeQty(id, delta) {
             removeItem(id);
         } else {
             item.quantity = newQty;
+            // 🔥 RECALCULAR SUBTOTAL con la nueva cantidad y los extras
+            const basePrice = item.price;
+            const extrasTotal = item.extrasApplied?.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0) || 0;
+            item.subtotal = (basePrice * item.quantity) + extrasTotal;
             updateCartUI();
         }
     }
