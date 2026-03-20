@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Demo EatAi - Popayán</title>
+    <!-- Tailwind CSS + Font Awesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-sans antialiased">
+    <div id="app" class="max-w-md mx-auto relative min-h-screen pb-24">
+        
+        <!-- HEADER CON LOGO -->
+        <header class="sticky top-0 z-20 glass border-b border-white/30 px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="images/Eatai.jpg" alt="EatAi Popayán" class="w-10 h-10 rounded-2xl object-cover shadow-md ring-2 ring-white/50">
+                <div>
+                    <h1 class="text-lg font-bold text-[#2D2D2D] tracking-tight">EatAi</h1>
+                    <p class="text-[10px] text-[#FF6B35] font-medium">Demo</p>
+                </div>
+            </div>
+            <div class="text-xs text-[#6B6B6B] bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
+                Popayán 🇨🇴
+            </div>
+        </header>
+        
+        <!-- BANNER DE ESTADO -->
+        <div id="statusBanner" class="mx-4 mt-4 p-3 rounded-2xl text-center font-semibold transition-all duration-300"></div>
+        
+        <!-- BUSCADOR -->
+        <div class="px-4 mt-4">
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[#FF6B35] opacity-60"></i>
+                <input type="text" id="searchInput" placeholder="Busca tu comida favorita..." 
+                       class="search-input w-full pl-11 pr-4 py-3 rounded-2xl glass-card border border-white/50 focus:outline-none focus:border-[#FF6B35] transition-all text-sm">
+            </div>
+        </div>
+        
+        <!-- GRID DE PRODUCTOS -->
+        <div class="px-4 mt-4 mb-4">
+            <div id="productsGrid" class="grid grid-cols-2 gap-4">
+                <!-- Productos se cargan dinámicamente -->
+            </div>
+            <div id="noResults" class="hidden text-center py-12">
+                <div class="text-6xl mb-3">🍔</div>
+                <p class="text-[#6B6B6B]">No encontramos ese producto</p>
+                <p class="text-xs text-[#6B6B6B] mt-1">Prueba con otra palabra</p>
+            </div>
+        </div>
+        
+        
+        <!-- TAB BAR INFERIOR FIJO CON SCROLL HORIZONTAL -->
+        <div class="fixed bottom-0 left-0 right-0 z-30 max-w-md mx-auto">
+            <div class="tab-bar glass rounded-t-3xl border-t border-white/30 py-2">
+                <div class="overflow-x-auto overflow-y-hidden hide-scrollbar">
+                    <div class="flex gap-2 px-4 min-w-max">
+                        <button data-category="todos" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <i class="fas fa-utensils text-xl"></i>
+                            <span class="text-xs font-medium">Todos</span>
+                        </button>
+                        <button data-category="hamburguesas" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <span class="text-xl">🍔</span>
+                            <span class="text-xs font-medium">Hamburguesas</span>
+                        </button>
+                        <button data-category="perros" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <span class="text-xl">🌭</span>
+                            <span class="text-xs font-medium">Perros</span>
+                        </button>
+                        <button data-category="salchipapas" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <span class="text-xl">🍟</span>
+                            <span class="text-xs font-medium">Salchipapas</span>
+                        </button>
+                        <button data-category="pizzas" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <span class="text-xl">🍕</span>
+                            <span class="text-xs font-medium">Pizzas</span>
+                        </button>
+                        <button data-category="bebidas" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <span class="text-xl">🥤</span>
+                            <span class="text-xs font-medium">Bebidas</span>
+                        </button>
+                        <button data-category="combos" class="tab-btn flex flex-col items-center gap-1 px-4 py-2 rounded-2xl transition-all active:scale-95">
+                            <span class="text-xl">🍗</span>
+                            <span class="text-xs font-medium">Combos</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+        <!-- CARRITO FLOTANTE (Push-up trigger) -->
+        <div id="cartFloating" class="fixed bottom-20 right-4 z-30">
+            <div class="relative">
+                <div class="w-14 h-14 rounded-full glass shadow-lg flex items-center justify-center cursor-pointer active:scale-95 transition-all">
+                    <i class="fas fa-shopping-cart text-2xl text-[#FF6B35]"></i>
+                    <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-[#FF6B35] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PUSH-UP PANEL (CARRITO) -->
+        <div id="cartPanel" class="fixed inset-x-0 bottom-0 z-40 transform transition-transform duration-400 ease-out translate-y-full">
+            <div class="overlay-blur fixed inset-0 -z-10 opacity-0 transition-opacity duration-300" id="cartOverlay"></div>
+            <div class="glass rounded-t-3xl max-h-[85vh] flex flex-col">
+                <div class="sticky top-0 glass rounded-t-3xl px-5 py-4 border-b border-white/30 flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Tu Pedido</h2>
+                    <button id="closeCartBtn" class="w-8 h-8 rounded-full bg-white/50 flex items-center justify-center">
+                        <i class="fas fa-times text-gray-600"></i>
+                    </button>
+                </div>
+                <div id="cartContent" class="flex-1 overflow-y-auto p-4 space-y-3">
+                    <!-- Contenido dinámico -->
+                </div>
+                <div id="cartFooter" class="p-4 border-t border-white/30 space-y-3">
+                    <!-- Método de pago, opciones entrega, total, etc -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- MODAL FUERA DE HORARIO -->
+        <div id="closedModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+            <div class="glass-card rounded-2xl p-6 max-w-sm w-full modal-enter">
+                <div class="text-center">
+                    <div class="text-5xl mb-3">🕐</div>
+                    <h3 class="text-xl font-bold mb-2">Estamos cerrados</h3>
+                    <p class="text-gray-600 text-sm mb-4">Puedes armar tu pedido y lo confirmaremos cuando abramos a las <strong>5:00 PM</strong></p>
+                    <div class="flex gap-3">
+                        <button id="continueShoppingBtn" class="flex-1 bg-[#FF6B35] text-white py-2 rounded-xl font-semibold">Seguir agregando</button>
+                        <button id="closeModalBtn" class="flex-1 bg-gray-200 text-gray-700 py-2 rounded-xl font-semibold">Recordármelo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MODAL DE TURNOS (Pre-WhatsApp) -->
+        <div id="turnosModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+            <div class="glass-card rounded-2xl p-6 max-w-sm w-full modal-enter">
+                <div class="text-center">
+                    <div class="text-5xl mb-3">⏱️</div>
+                    <h3 class="text-xl font-bold mb-2">Turnos por orden de llegada</h3>
+                    <p class="text-gray-600 text-sm mb-6">Trabajamos con sistema de turnos. Te contactaremos por WhatsApp para confirmar tu pedido.<br><br>Por favor, ten un poquito de paciencia 🫶</p>
+                    <div class="flex gap-3">
+                        <button id="confirmTurnosBtn" class="flex-1 bg-[#FF6B35] text-white py-3 rounded-xl font-semibold transition-all active:scale-95">
+                            Sí, esperaré
+                        </button>
+                        <button id="cancelTurnosBtn" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold transition-all active:scale-95">
+                            Cancelar pedido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FOOTER FIJO (Redes + crédito) -->
+        <footer class="mt-12 py-6 text-center border-t border-white/30 glass mb-20">
+            <!-- Logo EatAi en footer -->
+            <div class="flex justify-center mb-4">
+                <img src="images/Eatai.jpg" alt="EatAi Popayán" class="w-12 h-12 rounded-2xl object-cover shadow-md ring-2 ring-[#FF6B35]/20">
+            </div>
+            
+            <!-- Redes Sociales -->
+            <div class="flex justify-center gap-6 mb-3">
+                <a href="https://www.facebook.com/" target="_blank" class="text-2xl text-gray-600 hover:text-[#FF6B35] transition-all hover:scale-110" title="Síguenos en Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/" target="_blank" class="text-2xl text-gray-600 hover:text-[#FF6B35] transition-all hover:scale-110" title="Síguenos en Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/" target="_blank" class="text-2xl text-gray-600 hover:text-[#FF6B35] transition-all hover:scale-110" title="Síguenos en TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+            
+            <!-- Desarrollado por EatAi con link -->
+            <p class="text-sm text-gray-500 mb-1">
+                Desarrollado por 
+                <a href="https://eataicompany.github.io/eataicompany/" target="_blank" class="text-[#FF6B35] font-medium hover:underline transition">
+                    🚀 EatAi
+                </a>
+                | 
+                <a href="https://wa.me/573217054190?text=Hola%20EatAi,%20vengo%20desde%20la%20web%20de%20Demo%20Popayan" target="_blank" class="text-[#FF6B35] font-medium hover:underline transition">
+                    📞 321 705 4190
+                </a>
+            </p>
+            
+            <!-- Copyright -->
+            <p class="text-xs text-gray-400 mb-1">
+                © 2026 EatAi Popayán. Todos los derechos reservados.
+            </p>
+            
+            <!-- Nota de precios -->
+            <p class="text-xs text-gray-400">
+                Todos los precios incluyen IVA. Imágenes ilustrativas.
+            </p>
+        </footer>
+    </div>
+        <!-- JAVASCRIPT -->
+<script src="script.js"></script>
+</body>
+</html>

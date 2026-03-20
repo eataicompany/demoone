@@ -1,0 +1,244 @@
+
+/* Custom styles beyond Tailwind */
+body {
+    background-color: #FEF9F0;
+    background-image: url('images/Eatai.jpg');
+    background-repeat: repeat;
+    background-size: 40px;
+    background-attachment: fixed;
+    background-position: 0 0;
+    position: relative;
+}
+
+/* Capa de fondo para darle opacidad al logo tile */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(254, 249, 240, 0.92);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Glassmorphism effect */
+.glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Flip 3D */
+.card-flip {
+    position: relative;
+    perspective: 1000px;
+    min-height: 280px;
+    height: auto;
+    cursor: pointer;
+}
+
+.card-flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+.card-flip.flipped .card-flip-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    min-height: 280px;
+    height: auto;
+    backface-visibility: hidden;
+    border-radius: 1.5rem;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    overflow-y: auto;
+}
+
+/* Scrollbar personalizado */
+.card-back::-webkit-scrollbar {
+    width: 4px;
+}
+
+.card-back::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.card-back::-webkit-scrollbar-thumb {
+    background: #FF6B35;
+    border-radius: 10px;
+}
+
+/* Animación de latido para carrito */
+@keyframes heartbeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.cart-beat {
+    animation: heartbeat 0.5s ease-in-out;
+}
+
+/* Tab Bar inferior */
+.tab-bar {
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Modal animations */
+.modal-enter {
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Push-up panel */
+.push-up-panel {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.push-up-panel.closed {
+    transform: translateY(100%);
+}
+
+.push-up-panel.open {
+    transform: translateY(0);
+}
+
+/* Fondo con blur para overlay */
+.overlay-blur {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Input search */
+.search-input:focus {
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+/* Badge para adicionales */
+.extra-badge {
+    background: #FF6B3510;
+    border-left: 3px solid #FF6B35;
+}
+        /* Toast notifications */
+.toast-notification {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: 90%;
+    white-space: normal;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast-notification.error {
+    background: rgba(220, 53, 69, 0.95);
+    border-left: 4px solid #ff6b6b;
+}
+
+.toast-notification.success {
+    background: rgba(76, 175, 80, 0.95);
+    border-left: 4px solid #8bc34a;
+}
+
+.toast-notification.warning {
+    background: rgba(255, 107, 53, 0.95);
+    border-left: 4px solid #ffb347;
+}
+
+/* Mejoras responsive para tablets y móviles */
+@media (max-width: 640px) {
+    .products-grid {
+        gap: 12px;
+    }
+    
+    .card-front, .card-back {
+        min-height: 260px;
+    }
+    
+    .product-image {
+        height: 100px;
+    }
+    
+    .product-name {
+        font-size: 13px;
+    }
+    
+    .product-price {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+    .products-grid {
+        gap: 16px;
+    }
+    
+    .card-front, .card-back {
+        min-height: 280px;
+    }
+}
