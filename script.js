@@ -57,11 +57,15 @@ function checkBusinessStatus() {
     isOpen = (hour >= 17 || hour < 1);
     const banner = document.getElementById('statusBanner');
     if (isOpen) {
-        banner.className = 'bg-gradient-to-r from-green-500 to-green-600 text-white p-3 rounded-2xl text-center font-semibold shadow-lg';
-        banner.innerHTML = '🟢 Abierto, ¡te esperamos!';
+    banner.className = 'bg-gradient-to-r from-green-500 to-green-600 text-white px-19 py-19 rounded-full text-center text-xs font-medium inline-block w-auto mx-auto shadow-sm';
+    banner.innerHTML = '🟢 Abierto, ¡te esperamos!';
+    banner.style.width = 'auto';
+    banner.style.display = 'inline-block';
     } else {
         banner.className = 'bg-gray-200 text-gray-600 p-3 rounded-2xl text-center font-semibold';
         banner.innerHTML = '🔴 Cerrado. Abrimos a las 5:00 PM';
+        banner.style.width = '';
+        banner.style.display = 'block';
     }
 }
 
