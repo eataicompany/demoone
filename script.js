@@ -230,22 +230,35 @@ function addToCart(productId) {
 
 function addExtraToCart(productId, extra) {
     const item = cart.find(i => i.id === productId);
+    
+    // 🔥 Buscar la tarjeta y voltearla al frente si está volteada
+    const card = document.querySelector(`.card-flip[data-id="${productId}"]`);
+    
     if (item) {
+        // Producto ya en carrito, agregar el adicional
         const existingExtra = item.extrasApplied.find(e => e.name === extra.name);
         if (existingExtra) {
             existingExtra.quantity = (existingExtra.quantity || 1) + 1;
         } else {
             item.extrasApplied.push({ ...extra, quantity: 1 });
         }
-        // 🔥 RECALCULAR SUBTOTAL con extras
-        const extrasTotal = item.extrasApplied.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0);
-        item.subtotal = (item.price * item.quantity) + extrasTotal;
+        item.subtotal = item.price + item.extrasApplied.reduce((sum, e) => sum + (e.price * (e.quantity || 1)), 0);
         updateCartUI();
         animateCart();
         showToast(`✓ ${extra.name} agregado a ${item.name}`, 'success');
+        
+        // Si la tarjeta estaba volteada, la volvemos al frente
+        if (card && card.classList.contains('flipped')) {
+            card.classList.remove('flipped');
+        }
     } else {
         const product = productsData.find(p => p.id === productId);
-        showToast(`Primero agrega ${product.name} al carrito`, 'warning');
+        showToast(`Primero agrega ${product.name} al carrito antes de añadir extras`, 'warning');
+        
+        // 🔥 CORRECCIÓN: Volver la tarjeta al frente después del mensaje
+        if (card && card.classList.contains('flipped')) {
+            card.classList.remove('flipped');
+        }
     }
 }
 
