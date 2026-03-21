@@ -253,7 +253,7 @@ function addExtraToCart(productId, extra) {
         }
     } else {
         const product = productsData.find(p => p.id === productId);
-        showToast(`Primero agrega ${product.name} al carrito antes de añadir extras`, 'warning');
+        showToast(`Primero agrega el producto al carrito antes de añadir extras`, 'warning');
         
         // 🔥 CORRECCIÓN: Volver la tarjeta al frente después del mensaje
         if (card && card.classList.contains('flipped')) {
